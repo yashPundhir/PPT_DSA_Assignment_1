@@ -54,6 +54,29 @@ Output: 2, nums = [2,2,_*,_*]
 
 */
 
+// Solution
+
+function removeElement(nums, val) {
+	let k = 0; // Number of elements not equal to val
+
+	for (let i = 0; i < nums.length; i++) {
+		if (nums[i] !== val) {
+			nums[k] = nums[i];
+			k++;
+		}
+	}
+
+	return k;
+}
+
+const nums = [3, 2, 2, 3];
+const val = 3;
+
+const remain = removeElement(nums, val);
+console.log(
+	`Output: ${remain}, nums = [${nums.slice(0, remain).join(", ")}, _, _]`
+);
+
 /*
 
 **Q3.** Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
@@ -143,6 +166,39 @@ The result of the merge is [1,2,2,3,5,6] with the underlined elements coming fro
 
 */
 
+// Solution
+
+function merge(nums1, m, nums2, n) {
+	let i = m - 1;
+	let j = n - 1;
+	let k = m + n - 1;
+
+	while (i >= 0 && j >= 0) {
+		if (nums1[i] > nums2[j]) {
+			nums1[k] = nums1[i];
+			i--;
+		} else {
+			nums1[k] = nums2[j];
+			j--;
+		}
+		k--;
+	}
+
+	while (j >= 0) {
+		nums1[k] = nums2[j];
+		j--;
+		k--;
+	}
+}
+
+const nums1 = [1, 2, 3, 0, 0, 0];
+const m = 3;
+const nums2 = [2, 5, 6];
+const n = 3;
+
+merge(nums1, m, nums2, n);
+console.log("Output:", nums1);
+
 /*
 
 **Q6.** Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
@@ -173,3 +229,76 @@ function check(nums) {
 	return false;
 }
 console.log(check([3, 5, 1, 4, 6, 2, 3, 5, 2]));
+
+/*
+
+**Q7.** Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the nonzero elements.
+
+Note that you must do this in-place without making a copy of the array.
+
+**Example 1:**
+Input: nums = [0,1,0,3,12]
+Output: [1,3,12,0,0]
+
+*/
+
+// Solution
+
+function moveZeros(nums) {
+	let left = 0;
+	for (let right = 0; right < nums.length; right++) {
+		if (nums[right] !== 0) {
+			[nums[left], nums[right]] = [nums[right], nums[left]];
+			left++;
+		}
+	}
+	return nums;
+}
+
+const nums = [0, 1, 0, 3, 12];
+console.log(moveZeros(nums));
+
+/*
+
+**Q8.** You have a set of integers s, which originally contains all the numbers from 1 to n. Unfortunately, due to some error, one of the numbers in s got duplicated to another number in the set, which results in repetition of one number and loss of another number.
+
+You are given an integer array nums representing the data status of this set after the error.
+
+Find the number that occurs twice and the number that is missing and return them in the form of an array.
+
+**Example 1:**
+Input: nums = [1,2,2,4]
+Output: [2,3]
+
+*/
+
+// Solution
+
+function findErrorNums(nums) {
+	const n = nums.length;
+	const count = {};
+
+	let duplicate, missing;
+
+	for (let i = 0; i < n; i++) {
+		const num = nums[i];
+
+		if (count[num]) {
+			duplicate = num;
+		} else {
+			count[num] = 1;
+		}
+	}
+
+	for (let i = 1; i <= n; i++) {
+		if (!count[i]) {
+			missing = i;
+			break;
+		}
+	}
+
+	return [duplicate, missing];
+}
+
+const nums = [1, 2, 2, 4];
+console.log(findErrorNums(nums)); // Output: [2, 3]
